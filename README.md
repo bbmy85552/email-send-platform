@@ -39,7 +39,7 @@ pnpm install
 
 ### 3. 環境變數配置
 
-創建 `.env.local` 文件並添加以下配置：
+創建 `.env` 文件並添加以下配置：
 
 ```env
 # Google Identity Services 配置
