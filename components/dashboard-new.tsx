@@ -112,6 +112,14 @@ export default function DashboardNew() {
                     </Badge>
                   </div>
                 )}
+                <Button 
+                  onClick={() => router.push('/email-compose')}
+                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                  size="sm"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  郵件發送
+                </Button>
               </CardContent>
             </Card>
           </div>
