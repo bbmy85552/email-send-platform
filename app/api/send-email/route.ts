@@ -104,7 +104,8 @@ export async function POST(request: NextRequest) {
       emailId: data?.id,
       recordId: emailRecord.id,
       dailyCount: todayCount + 1,
-      dailyLimit: dailyLimit
+      dailyLimit: dailyLimit,
+      stayOnPage: true // 指示前端不要重定向
     })
 
   } catch (error) {
