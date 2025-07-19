@@ -1,0 +1,50 @@
+-- This script creates the necessary tables and indexes for the email application.
+-- It is designed for a MySQL database and uses the InnoDB engine for transaction support and foreign keys.
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` VARCHAR(36) PRIMARY KEY,
+  `email` VARCHAR(255) UNIQUE NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `picture` VARCHAR(500),
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Table structure for email_records
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `email_records` (
+  `id` VARCHAR(36) PRIMARY KEY,
+  `user_id` VARCHAR(36) NOT NULL,
+  `from_name` VARCHAR(255) NOT NULL,
+  `sender_email` VARCHAR(255) NOT NULL,
+  `recipient` VARCHAR(255) NOT NULL,
+  `subject` VARCHAR(500) NOT NULL,
+  `content` TEXT NOT NULL,
+  `email_id` VARCHAR(255),
+  `status` ENUM('sent', 'failed', 'pending') NOT NULL DEFAULT 'pending',
+  `sent_at` TIMESTAMP NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Create Indexes
+-- Note: The primary key and unique constraints automatically create indexes.
+-- These statements create additional indexes for performance optimization on common query patterns.
+-- The `IF NOT EXISTS` syntax for `CREATE INDEX` is supported in MySQL 8.0.29+ and MariaDB 10.1+.
+-- For older versions, you might need to remove `IF NOT EXISTS` and check for existence manually.
+-- ----------------------------
+
+-- Index for quickly finding all email records for a specific user.
+ALTER TABLE `email_records` ADD INDEX `idx_email_records_user_id` (`user_id`);
+
+-- Index for sorting email records by their creation date.
+ALTER TABLE `email_records` ADD INDEX `idx_email_records_created_at` (`created_at`);
+
+-- Index for quickly looking up users by their email address (though the UNIQUE constraint already creates one).
+ALTER TABLE `users` ADD INDEX `idx_users_email` (`email`);
+

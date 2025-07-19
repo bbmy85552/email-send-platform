@@ -9,10 +9,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowLeft, Send, Loader2 } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ArrowLeft, Send, Loader2, User, LogOut } from "lucide-react"
 
 export default function EmailCompose() {
-  const { user } = useGoogleAuth()
+  const { user, signOut } = useGoogleAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -79,15 +80,47 @@ export default function EmailCompose() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Button
-          onClick={() => router.push("/dashboard")}
-          variant="ghost"
-          className="mb-6"
-          size="sm"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          返回儀表板
-        </Button>
+        {/* 顶部导航栏 */}
+        <div className="flex justify-between items-center mb-6">
+          <Button
+            onClick={() => router.push("/dashboard")}
+            variant="ghost"
+            size="sm"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            返回儀表板
+          </Button>
+
+          {/* 用户信息 */}
+          {user && (
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.picture} alt={user.name} />
+                  <AvatarFallback>
+                    <User className="h-4 w-4" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-sm">
+                  <div className="font-medium text-gray-900">{user.name}</div>
+                  <div className="text-gray-500">{user.email}</div>
+                </div>
+              </div>
+              <Button
+                onClick={() => {
+                  signOut();
+                  router.push('/');
+                }}
+                variant="ghost"
+                size="sm"
+                className="text-red-600 hover:text-red-700"
+              >
+                <LogOut className="w-4 h-4 mr-1" />
+                登出
+              </Button>
+            </div>
+          )}
+        </div>
 
         <Card>
           <CardHeader>
@@ -177,7 +210,7 @@ export default function EmailCompose() {
 
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !user}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {loading ? (
@@ -192,6 +225,12 @@ export default function EmailCompose() {
                   </>
                 )}
               </Button>
+              
+              {!user && (
+                <div className="text-center text-sm text-red-600">
+                  請先登錄後再發送郵件
+                </div>
+              )}
             </form>
           </CardContent>
         </Card>

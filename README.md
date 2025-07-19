@@ -55,3 +55,21 @@ The project has been simplified to reduce dependencies and complexity:
 - React 19
 - TailwindCSS for styling
 - Google Identity Services for authentication 
+
+
+## db utile
+  1. 安装依赖：
+  npm install
+  2. 配置环境变量：
+  创建.env文件，填写MySQL连接信息：
+  DB_HOST=localhost
+  DB_USER=root
+  DB_PASSWORD=your_password
+  DB_NAME=email_app
+  DB_PORT=3306
+  3. 初始化数据库：
+  npm run init-db
+  4. 启动应用：
+  npm run dev
+  5. 测试数据库连接：
+  访问 http://localhost:3000/api/test-db

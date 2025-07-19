@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
+import crypto from 'crypto';
+import { createOrUpdateUser, createEmailRecord, updateEmailStatus, getUserByEmail } from "@/lib/db"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -25,27 +27,66 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // 验证用户邮箱
+    if (!userEmail) {
+      return NextResponse.json(
+        { error: "用戶未登錄" },
+        { status: 401 }
+      )
+    }
+
+    // 获取或创建用户信息
+    let user = await getUserByEmail(userEmail);
+    if (!user) {
+      // 创建新用户
+      user = await createOrUpdateUser({
+        id: crypto.randomUUID(),
+        email: userEmail,
+        name: userEmail.split('@')[0], // 默认使用邮箱前缀作为用户名
+        picture: null
+      });
+    }
+
+    // 创建邮件记录
+    const emailRecord = await createEmailRecord({
+      user_id: user.id,
+      from_name: fromName,
+      sender_email: `${senderEmail}@novatime.top`,
+      recipient: recipient,
+      subject: subject,
+      content: content,
+      email_id: null,
+      status: 'pending',
+      sent_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
+    });
+
     // 发送邮件
     const { data, error } = await resend.emails.send({
       from: `${fromName} <${senderEmail}@novatime.top>`,
       to: [recipient],
       subject: subject,
       html: content,
-      replyTo: userEmail // 使用用户的实际邮箱作为回复地址
+      replyTo: userEmail
     })
 
     if (error) {
       console.error("郵件發送錯誤:", error)
+      // 更新邮件状态为失败
+      await updateEmailStatus(emailRecord.id, 'failed');
       return NextResponse.json(
         { error: "郵件發送失敗，請稍後再試" },
         { status: 500 }
       )
     }
 
+    // 更新邮件状态为成功
+    await updateEmailStatus(emailRecord.id, 'sent', data?.id);
+
     return NextResponse.json({
       success: true,
       message: "郵件發送成功",
-      emailId: data?.id
+      emailId: data?.id,
+      recordId: emailRecord.id
     })
 
   } catch (error) {
