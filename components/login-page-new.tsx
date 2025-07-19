@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Alert, AlertDescription } from "@/components/ui/simplified"
 import { Shield, Users, Zap, AlertCircle, Loader2 } from "lucide-react"
 import { useGoogleAuth } from "@/hooks/use-google-auth"
 
@@ -82,7 +81,7 @@ export default function LoginPageNew() {
         {/* Right side - Login card */}
         <div className="flex justify-center lg:justify-end">
           <Card className="w-full max-w-md shadow-xl">
-            <CardHeader className="space-y-1 text-center">
+            <CardHeader className="text-center">
               <CardTitle className="text-2xl font-bold">登入您的帳戶</CardTitle>
               <CardDescription>使用您的 Google 帳戶安全登入</CardDescription>
             </CardHeader>

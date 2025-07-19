@@ -1,16 +1,40 @@
-import { type ClassValue, clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-/**
- * 格式化用戶名顯示
- */
-export function formatUserName(name?: string | null): string {
-  if (!name) return "未知用戶"
-  return name.length > 20 ? `${name.substring(0, 20)}...` : name
+// Helper function to format user name
+export function formatUserName(name?: string): string {
+  if (!name) return "用户"
+  
+  // If name contains spaces, format as first initial + last name
+  if (name.includes(" ")) {
+    const nameParts = name.split(" ")
+    return `${nameParts[0][0]}. ${nameParts.slice(1).join(" ")}`
+  }
+  
+  return name
+}
+
+// Helper function to get avatar fallback text
+export function getAvatarFallback(name?: string): string {
+  if (!name) return "U"
+  
+  // If name contains spaces, use first initials
+  if (name.includes(" ")) {
+    const initials = name.split(" ")
+      .filter(part => part.length > 0)
+      .map(part => part[0].toUpperCase())
+      .slice(0, 2)
+      .join("")
+      
+    return initials
+  }
+  
+  // Otherwise use first two characters
+  return name.slice(0, 2).toUpperCase()
 }
 
 /**
@@ -33,17 +57,4 @@ export function formatDateTime(date: Date = new Date()): string {
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
-}
-
-/**
- * 產生用戶頭像的 fallback 文字
- */
-export function getAvatarFallback(name?: string | null): string {
-  if (!name) return "U"
-  return name
-    .split(" ")
-    .map(word => word.charAt(0))
-    .join("")
-    .toUpperCase()
-    .substring(0, 2)
 }
