@@ -1,9 +1,9 @@
 "use client"
 
-import { Button } from "@/components/ui/simplified"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/simplified"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/simplified"
-import { Badge } from "@/components/ui/simplified"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import { LogOut, Mail, Calendar, Shield, Activity, User, Clock, Globe } from "lucide-react"
 import { formatUserName, getAvatarFallback } from "@/lib/utils"
 import { useState, useEffect } from "react"

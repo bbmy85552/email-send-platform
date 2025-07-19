@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Alert, AlertDescription } from "@/components/ui/simplified"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Shield, Users, Zap, AlertCircle, Loader2 } from "lucide-react"
 import { useGoogleAuth } from "@/hooks/use-google-auth"
 
