@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useGoogleAuth } from "@/hooks/use-google-auth"
-import LoginPageNew from "@/components/login-page-new"
+import EnhancedHomepage from "@/components/enhanced-homepage"
 
 export default function HomePage() {
   const router = useRouter()
@@ -27,5 +27,5 @@ export default function HomePage() {
     )
   }
 
-  return <LoginPageNew />
+  return <EnhancedHomepage />
 } 
