@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 import crypto from 'crypto';
-import { createOrUpdateUser, createEmailRecord, updateEmailStatus, getUserByEmail } from "@/lib/db"
+import { createOrUpdateUser, createEmailRecord, updateEmailStatus, getUserByEmail, getDailyEmailCount } from "@/lib/db"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -47,6 +47,20 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // 检查每日发邮件次数限制
+    const dailyLimit = parseInt(process.env.DAILY_EMAIL_LIMIT || '10');
+    const todayCount = await getDailyEmailCount(user.id);
+    
+    console.log(`用户 ${user.email} 今日已发送邮件: ${todayCount}/${dailyLimit}`);
+    
+    if (todayCount >= dailyLimit) {
+      console.log(`用户 ${user.email} 已达到每日发邮件上限: ${dailyLimit}次`);
+      return NextResponse.json(
+        { error: `今日发邮件次数已达上限 (${dailyLimit}次)，请明天再试` },
+        { status: 429 }
+      );
+    }
+
     // 创建邮件记录
     const emailRecord = await createEmailRecord({
       user_id: user.id,
@@ -82,11 +96,15 @@ export async function POST(request: NextRequest) {
     // 更新邮件状态为成功
     await updateEmailStatus(emailRecord.id, 'sent', data?.id);
 
+    console.log(`用户 ${user.email} 成功发送第 ${todayCount + 1} 封邮件`);
+
     return NextResponse.json({
       success: true,
       message: "郵件發送成功",
       emailId: data?.id,
-      recordId: emailRecord.id
+      recordId: emailRecord.id,
+      dailyCount: todayCount + 1,
+      dailyLimit: dailyLimit
     })
 
   } catch (error) {

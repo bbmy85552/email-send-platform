@@ -183,3 +183,30 @@ export async function updateEmailStatus(emailId: string, status: 'sent' | 'faile
     [status, emailServiceId || null, emailId]
   );
 }
+
+// 获取用户每日发邮件次数
+export async function getDailyEmailCount(userId: string): Promise<number> {
+  const pool = getPool();
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD format
+  
+  const [rows] = await pool.execute(
+    'SELECT COUNT(*) as count FROM email_records WHERE user_id = ? AND DATE(created_at) = ?',
+    [userId, today]
+  );
+  
+  const result = rows as any[];
+  return result[0]?.count || 0;
+}
+
+// 获取用户每日发邮件详情
+export async function getDailyEmailDetails(userId: string): Promise<EmailRecord[]> {
+  const pool = getPool();
+  const today = new Date().toISOString().slice(0, 10);
+  
+  const [rows] = await pool.execute(
+    'SELECT * FROM email_records WHERE user_id = ? AND DATE(created_at) = ? ORDER BY created_at DESC',
+    [userId, today]
+  );
+  
+  return rows as EmailRecord[];
+}
