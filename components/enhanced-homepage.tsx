@@ -218,30 +218,28 @@ export default function EnhancedHomepage() {
                 ))}
               </motion.div>
 
-              {/* 登录按钮区域 */}
+              {/* 登录按钮区域 - 右下方 */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="space-y-4"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="flex flex-col items-end space-y-4"
               >
-                <div className="flex items-center space-x-4">
-                  <div 
-                    ref={(el) => {
-                      if (el && !isLoading && !user) {
-                        el.innerHTML = ''
-                        renderSignInButton(el)
-                      }
-                    }}
-                    className="w-full flex justify-center"
-                  />
-                </div>
+                <div 
+                  ref={(el) => {
+                    if (el && !isLoading && !user) {
+                      el.innerHTML = ''
+                      renderSignInButton(el)
+                    }
+                  }}
+                  className="flex justify-end"
+                />
                 
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="text-sm text-gray-500 text-center"
+                  transition={{ delay: 1 }}
+                  className="text-sm text-gray-500 text-right max-w-xs"
                 >
                   🔒 使用 Google 安全認證，無需註冊新賬戶
                 </motion.div>
