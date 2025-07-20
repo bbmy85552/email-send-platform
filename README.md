@@ -76,7 +76,10 @@ email-send/
 │   ├── google-auth.ts         # Google认证配置
 │   └── utils.ts               # 工具函数
 ├── public/                     # 静态资源
+├── scripts/                    # 数据库初始化脚本
+│   └── init-db.js             # 自动创建数据库表结构
 ├── .env.example               # 环境变量示例
+├── middleware.ts              # Next.js中间件配置
 ├── package.json               # 项目依赖
 ├── tsconfig.json              # TypeScript配置
 ├── tailwind.config.js         # Tailwind配置
@@ -92,6 +95,7 @@ email-send/
 - 使用 Google Identity Services 实现无密码登录
 - 自动创建用户记录（首次登录时）
 - 安全的会话管理
+- 轻量级实现，无额外依赖
 
 #### 相关文件：
 - `hooks/use-google-auth.ts` - 认证Hook
@@ -99,18 +103,6 @@ email-send/
 - `app/page.tsx` - 首页登录入口
 
 ### 2. 邮件发送系统
-
-#### 邮件发送流程
-1. 用户填写邮件信息（发件人、收件人、主题、内容）
-2. 系统验证用户身份和发送限额
-3. 记录邮件到数据库
-4. 调用 Resend API 发送邮件
-5. 更新邮件发送状态
-
-#### 相关文件：
-- `app/api/send-email/route.ts` - 邮件发送API
-- `lib/db.ts` - 数据库操作
-- `lib/resend.ts` - Resend配置
 
 ### 3. 数据库设计
 
