@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
       recipient: email.recipient,
       fromName: email.from_name,
       senderEmail: email.sender_email,
+      content: email.content,
       status: email.status,
       sentAt: email.sent_at,
       createdAt: email.created_at,

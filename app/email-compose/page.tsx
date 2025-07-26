@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { ArrowLeft, Send, Loader2, User, LogOut, RefreshCw, Mail, Clock, CheckCircle, XCircle } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { ArrowLeft, Send, Loader2, User, LogOut, RefreshCw, Mail, Clock, CheckCircle, XCircle, X } from "lucide-react"
 
 interface EmailData {
   id: string
@@ -35,6 +36,8 @@ export default function EmailCompose() {
   const [loadingEmails, setLoadingEmails] = useState(false)
   const [dailyCount, setDailyCount] = useState(0)
   const [dailyLimit, setDailyLimit] = useState(10)
+  const [selectedEmail, setSelectedEmail] = useState<EmailData | null>(null)
+  const [showEmailModal, setShowEmailModal] = useState(false)
   
   const [formData, setFormData] = useState({
     fromName: "",
@@ -149,6 +152,16 @@ export default function EmailCompose() {
       default:
         return <Mail className="w-4 h-4 text-gray-500" />
     }
+  }
+
+  const handleEmailClick = (email: EmailData) => {
+    setSelectedEmail(email)
+    setShowEmailModal(true)
+  }
+
+  const closeEmailModal = () => {
+    setShowEmailModal(false)
+    setSelectedEmail(null)
   }
 
   if (!user) {
@@ -361,7 +374,11 @@ export default function EmailCompose() {
                 ) : (
                   <div className="space-y-3 max-h-96 overflow-y-auto">
                     {emails.map((email) => (
-                      <div key={email.id} className="border rounded-lg p-3 hover:bg-muted/50 transition-colors">
+                      <div 
+                        key={email.id} 
+                        className="border rounded-lg p-3 hover:bg-muted/50 cursor-pointer transition-colors"
+                        onClick={() => handleEmailClick(email)}
+                      >
                         <div className="flex items-start justify-between mb-1">
                           <h4 className="text-sm font-medium truncate flex-1">{email.subject}</h4>
                           <div className="ml-2">{getStatusIcon(email.status)}</div>
@@ -385,6 +402,72 @@ export default function EmailCompose() {
           </div>
         </div>
       </div>
+
+      {/* 邮件详情弹窗 */}
+      {selectedEmail && (
+        <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle className="flex items-center justify-between">
+                <span className="truncate">{selectedEmail.subject}</span>
+              </DialogTitle>
+              <DialogDescription>
+                邮件详细信息
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 overflow-y-auto max-h-[60vh]">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">发件人:</span>
+                  </div>
+                  <p className="font-medium text-foreground">{selectedEmail.fromName}</p>
+                  <p className="text-sm text-muted-foreground">{selectedEmail.senderEmail}@novatime.top</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">收件人:</span>
+                  </div>
+                  <p className="font-medium text-foreground">{selectedEmail.recipient}</p>
+                </div>
+              </div>
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">发送时间:</span>
+                    <span className="text-sm font-medium">{formatDate(selectedEmail.createdAt)}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {getStatusIcon(selectedEmail.status)}
+                    <span className="text-sm font-medium">
+                      {selectedEmail.status === 'sent' ? '已发送' : 
+                       selectedEmail.status === 'failed' ? '发送失败' : '待发送'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              {selectedEmail.emailId && (
+                <div className="border-t pt-4">
+                  <p className="text-sm text-muted-foreground mb-1">邮件ID:</p>
+                  <p className="text-sm font-mono bg-muted p-2 rounded">{selectedEmail.emailId}</p>
+                </div>
+              )}
+              <div className="border-t pt-4">
+                <h4 className="font-medium mb-2">邮件内容:</h4>
+                <div className="bg-muted p-4 rounded-lg">
+                  <div 
+                    className="text-sm text-foreground prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: selectedEmail.content }}
+                  />
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }
