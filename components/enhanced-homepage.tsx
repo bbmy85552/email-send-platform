@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Mail, Shield, Zap, BarChart3, RefreshCw, CheckCircle, Clock } from "lucide-react"
 import { useGoogleAuth } from "@/hooks/use-google-auth"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function EnhancedHomepage() {
   const router = useRouter()
@@ -97,11 +98,11 @@ export default function EnhancedHomepage() {
   if (!mounted) return null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 overflow-hidden">
+    <div className="min-h-screen bg-background overflow-hidden">
       {/* 背景装饰动画 */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+          className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/20 rounded-full mix-blend-multiply filter blur-xl opacity-70"
           animate={{
             scale: [1, 1.2, 1],
             x: [0, 30, 0],
@@ -114,7 +115,7 @@ export default function EnhancedHomepage() {
           }}
         />
         <motion.div
-          className="absolute top-1/3 right-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+          className="absolute top-1/3 right-1/4 w-72 h-72 bg-secondary/20 rounded-full mix-blend-multiply filter blur-xl opacity-70"
           animate={{
             scale: [1.2, 1, 1.2],
             x: [0, -30, 0],
@@ -127,7 +128,7 @@ export default function EnhancedHomepage() {
           }}
         />
         <motion.div
-          className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+          className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-70"
           animate={{
             scale: [1, 1.3, 1],
             x: [0, -20, 0],
@@ -155,9 +156,12 @@ export default function EnhancedHomepage() {
               className="flex items-center space-x-2"
             >
               <Mail className="w-8 h-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">NovaMail</span>
+              <span className="text-2xl font-bold text-foreground">NovaMail</span>
             </motion.div>
-            <div id="google-signin-nav" className="hidden" />
+            <div className="flex items-center space-x-4">
+              <div id="google-signin-nav" className="hidden" />
+              <ThemeToggle />
+            </div>
           </div>
         </motion.nav>
 
@@ -176,10 +180,10 @@ export default function EnhancedHomepage() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1, delay: 0.2 }}
-                  className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight"
+                  className="text-5xl lg:text-7xl font-bold text-foreground leading-tight"
                 >
                   專業郵件
-                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <span className="text-primary">
                     發送平台
                   </span>
                 </motion.h1>
@@ -188,7 +192,7 @@ export default function EnhancedHomepage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-xl text-gray-600 max-w-lg leading-relaxed"
+                  className="text-xl text-muted-foreground max-w-lg leading-relaxed"
                 >
                   使用 Google 賬戶安全登入，享受智能郵件發送、實時統計追蹤、
                   每日限額管理等專業功能，讓您的郵件溝通更高效、更安全。
@@ -207,7 +211,7 @@ export default function EnhancedHomepage() {
                     key={feature.title}
                     variants={itemVariants}
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20"
+                    className="bg-card/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border"
                   >
                     <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${feature.color} flex items-center justify-center mb-3`}>
                       <feature.icon className="w-6 h-6 text-white" />
@@ -262,7 +266,7 @@ export default function EnhancedHomepage() {
                     scale: 1.02, 
                     boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
                   }}
-                  className="bg-white/90 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/30"
+                  className="bg-card/90 backdrop-blur-md rounded-2xl p-6 shadow-xl border"
                 >
                   <div className="flex items-start space-x-4">
                     <motion.div
@@ -288,12 +292,12 @@ export default function EnhancedHomepage() {
               <motion.div
                 variants={fadeInUp}
                 transition={{ delay: 0.6 }}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 text-white"
+                className="bg-primary rounded-2xl p-6 text-primary-foreground"
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="text-lg font-semibold mb-1">即刻開始使用</h4>
-                    <p className="text-blue-100">體驗專業郵件發送服務</p>
+                    <p className="text-primary-foreground/80">體驗專業郵件發送服務</p>
                   </div>
                   <motion.div
                     animate={{ rotate: [0, 360] }}
@@ -315,7 +319,7 @@ export default function EnhancedHomepage() {
           transition={{ delay: 1 }}
           className="container mx-auto px-6 py-8 text-center"
         >
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             © 2025 NovaMail. 專業郵件發送服務，讓溝通更簡單。
           </p>
         </motion.footer>

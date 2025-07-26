@@ -10,6 +10,7 @@ import { useState, useEffect } from "react"
 import { useGoogleAuth } from "@/hooks/use-google-auth"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function DashboardNew() {
   const { user, signOut, isSignedIn } = useGoogleAuth()
@@ -40,7 +41,7 @@ export default function DashboardNew() {
 
   if (!mounted || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -52,7 +53,7 @@ export default function DashboardNew() {
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
             className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"
           />
-          <p className="text-gray-600">載入中...</p>
+          <p className="text-muted-foreground">載入中...</p>
         </motion.div>
       </div>
     )
@@ -90,13 +91,13 @@ export default function DashboardNew() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       {/* Animated Header */}
       <motion.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="bg-white/80 backdrop-blur-md shadow-lg border-b border-white/20"
+        className="bg-card/80 backdrop-blur-md shadow-lg border-b"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -106,8 +107,8 @@ export default function DashboardNew() {
               transition={{ delay: 0.3 }}
               className="flex items-center space-x-4"
             >
-              <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">儀表板</h1>
-              <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
+              <h1 className="text-xl font-bold text-foreground">儀表板</h1>
+              <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700">
                 <Shield className="w-3 h-3 mr-1" />
                 已驗證
               </Badge>
@@ -117,7 +118,9 @@ export default function DashboardNew() {
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
+              className="flex items-center space-x-2"
             >
+              <ThemeToggle />
               <Button 
                 onClick={handleSignOut} 
                 variant="outline" 
@@ -146,7 +149,7 @@ export default function DashboardNew() {
             whileHover={cardHoverVariants}
             className="lg:col-span-1"
           >
-            <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
+            <Card className="bg-card/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
               <CardHeader className="text-center relative">
                 <motion.div
                   initial={{ scale: 0 }}
@@ -165,7 +168,7 @@ export default function DashboardNew() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <CardTitle className="text-xl font-bold text-gray-900">{formatUserName(user.name)}</CardTitle>
+                  <CardTitle className="text-xl font-bold text-foreground">{formatUserName(user.name)}</CardTitle>
                   <CardDescription className="flex items-center justify-center mt-2">
                     <Mail className="w-4 h-4 mr-2" />
                     {user.email}
@@ -179,31 +182,31 @@ export default function DashboardNew() {
                   transition={{ delay: 0.6, staggerChildren: 0.1 }}
                   className="space-y-2"
                 >
-                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 flex items-center">
+                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground flex items-center">
                       <Activity className="w-4 h-4 mr-2" />
                       登入狀態
                     </span>
-                    <Badge className="bg-green-100 text-green-800 border-green-200">
+                    <Badge className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700">
                       在線
                     </Badge>
                   </div>
                   
-                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 flex items-center">
+                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground flex items-center">
                       <Shield className="w-4 h-4 mr-2" />
                       驗證方式
                     </span>
-                    <span className="text-sm font-semibold text-gray-900">Google Identity</span>
+                    <span className="text-sm font-semibold text-foreground">Google Identity</span>
                   </div>
                   
-                  <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg">
-                    <span className="text-sm font-medium text-gray-600 flex items-center">
+                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <span className="text-sm font-medium text-muted-foreground flex items-center">
                       <Clock className="w-4 h-4 mr-2" />
                       當前時間
                     </span>
                     <motion.span 
-                      className="text-sm font-mono text-gray-900"
+                      className="text-sm font-mono text-foreground"
                       animate={{ opacity: [0.7, 1, 0.7] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
@@ -221,7 +224,7 @@ export default function DashboardNew() {
                 >
                   <Button 
                     onClick={() => router.push('/email-compose')}
-                    className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
+                    className="w-full mt-4 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg"
                     size="lg"
                   >
                     <Mail className="w-5 h-5 mr-2" />
@@ -242,14 +245,14 @@ export default function DashboardNew() {
           {/* Main dashboard content with staggered animations */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div variants={itemVariants}>
-              <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
+              <Card className="bg-card/90 backdrop-blur-sm shadow-xl border-0 overflow-hidden">
                 <CardHeader>
                   <motion.div
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.7 }}
                   >
-                    <CardTitle className="flex items-center text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    <CardTitle className="flex items-center text-2xl text-foreground">
                       <Calendar className="w-6 h-6 mr-3" />
                       歡迎回來！
                     </CardTitle>
@@ -264,7 +267,7 @@ export default function DashboardNew() {
                     transition={{ delay: 0.8, staggerChildren: 0.1 }}
                   >
                     <motion.div 
-                      className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200"
+                      className="p-6 bg-muted/50 rounded-xl border"
                       whileHover={{ scale: 1.02, rotateZ: 1 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
@@ -272,16 +275,16 @@ export default function DashboardNew() {
                         animate={{ rotate: [0, 10, -10, 0] }}
                         transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                       >
-                        <Shield className="w-10 h-10 text-blue-600 mb-3" />
+                        <Shield className="w-10 h-10 text-blue-600 dark:text-blue-400 mb-3" />
                       </motion.div>
-                      <h3 className="font-semibold text-blue-900 mb-2 text-lg">安全連接</h3>
-                      <p className="text-sm text-blue-700 leading-relaxed">
+                      <h3 className="font-semibold text-foreground mb-2 text-lg">安全連接</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         您的連接已通過 SSL 加密保護，確保數據傳輸安全。
                       </p>
                     </motion.div>
                     
                     <motion.div 
-                      className="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200"
+                      className="p-6 bg-muted/50 rounded-xl border"
                       whileHover={{ scale: 1.02, rotateZ: -1 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
@@ -289,10 +292,10 @@ export default function DashboardNew() {
                         animate={{ scale: [1, 1.1, 1] }}
                         transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}
                       >
-                        <Activity className="w-10 h-10 text-green-600 mb-3" />
+                        <Activity className="w-10 h-10 text-green-600 dark:text-green-400 mb-3" />
                       </motion.div>
-                      <h3 className="font-semibold text-green-900 mb-2 text-lg">身份已驗證</h3>
-                      <p className="text-sm text-green-700 leading-relaxed">
+                      <h3 className="font-semibold text-foreground mb-2 text-lg">身份已驗證</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         通過 Google Identity Services 驗證，享受現代化的登入體驗。
                       </p>
                     </motion.div>
@@ -302,15 +305,15 @@ export default function DashboardNew() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0">
+              <Card className="bg-card/90 backdrop-blur-sm shadow-xl border-0">
                 <CardHeader>
                   <motion.div
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.9 }}
                   >
-                    <CardTitle className="text-xl">用戶資訊</CardTitle>
-                    <CardDescription>您的 Google 帳戶詳細資訊</CardDescription>
+                    <CardTitle className="text-xl text-foreground">用戶資訊</CardTitle>
+                    <CardDescription className="text-muted-foreground">您的 Google 帳戶詳細資訊</CardDescription>
                   </motion.div>
                 </CardHeader>
                 <CardContent>
@@ -328,14 +331,13 @@ export default function DashboardNew() {
                       <motion.div
                         key={item.label}
                         variants={itemVariants}
-                        className="flex items-center justify-between p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200"
-                        whileHover={{ x: 5, backgroundColor: "rgb(229, 231, 235)" }}
+                        className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border hover:bg-muted/70 transition-colors"
                       >
-                        <span className="text-sm font-medium text-gray-600 flex items-center">
+                        <span className="text-sm font-medium text-muted-foreground flex items-center">
                           <item.icon className="w-4 h-4 mr-2" />
                           {item.label}
                         </span>
-                        <span className="text-sm text-gray-900 font-mono"
+                        <span className="text-sm text-foreground font-mono"
                           style={{ overflowWrap: 'break-word', maxWidth: '200px' }}
                         >
                           {item.value}
@@ -347,15 +349,15 @@ export default function DashboardNew() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <Card className="bg-white/90 backdrop-blur-sm shadow-xl border-0">
+              <Card className="bg-card/90 backdrop-blur-sm shadow-xl border-0">
                 <CardHeader>
                   <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 1.1 }}
                   >
-                    <CardTitle className="text-xl">系統資訊</CardTitle>
-                    <CardDescription>當前系統和會話狀態</CardDescription>
+                    <CardTitle className="text-xl text-foreground">系統資訊</CardTitle>
+                    <CardDescription className="text-muted-foreground">當前系統和會話狀態</CardDescription>
                   </motion.div>
                 </CardHeader>
                 <CardContent>
@@ -373,11 +375,11 @@ export default function DashboardNew() {
                       <motion.div
                         key={item.title}
                         variants={itemVariants}
-                        className={`text-center p-6 bg-gradient-to-br from-${item.color}-50 to-${item.color}-100 rounded-xl border-2 border-${item.color}-200`}
+                        className="text-center p-6 bg-muted/50 rounded-xl border-2 border-border hover:bg-muted/70 transition-colors"
                         whileHover={{ 
                           scale: 1.05, 
                           rotateY: 5,
-                          boxShadow: `0 10px 25px -5px rgb(59, 130, 246, 0.3)`
+                          boxShadow: `0 10px 25px -5px rgba(var(--primary), 0.3)`
                         }}
                         whileTap={{ scale: 0.95 }}
                       >
@@ -388,10 +390,10 @@ export default function DashboardNew() {
                           }}
                           transition={{ duration: 3, repeat: Infinity, delay: index * 0.2 }}
                         >
-                          <item.icon className={`w-10 h-10 text-${item.color}-600 mx-auto mb-3`} />
+                          <item.icon className="w-10 h-10 text-foreground mx-auto mb-3" />
                         </motion.div>
-                        <h4 className={`font-bold text-${item.color}-900 text-lg`}>{item.title}</h4>
-                        <p className={`text-sm text-${item.color}-700 font-semibold`}>{item.value}</p>
+                        <h4 className="font-bold text-foreground text-lg">{item.title}</h4>
+                        <p className="text-sm text-muted-foreground font-semibold">{item.value}</p>
                       </motion.div>
                     ))}
                   </motion.div>

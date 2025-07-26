@@ -18,7 +18,7 @@ export default function RootLayout({
         <script src="https://accounts.google.com/gsi/client" async></script>
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} themes={["light", "dark", "zinc", "neutral", "stone"]}>
         {children}
         </ThemeProvider>
       </body>
