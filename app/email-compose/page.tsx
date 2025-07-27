@@ -423,7 +423,7 @@ export default function EmailCompose() {
                     <span className="text-muted-foreground">发件人:</span>
                   </div>
                   <p className="font-medium text-foreground">{selectedEmail.fromName}</p>
-                  <p className="text-sm text-muted-foreground">{selectedEmail.senderEmail}@novatime.top</p>
+                  <p className="text-sm text-muted-foreground">{selectedEmail.senderEmail}</p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
